@@ -47,6 +47,7 @@ async function init() {
 }
 
 require("./routes/auth.route")(app);
+require("./routes/category.route")(app);
 
 app.listen(server_config.PORT, () => {
   console.log("server started at port number : ", server_config.PORT);

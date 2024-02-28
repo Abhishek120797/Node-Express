@@ -1,4 +1,4 @@
-const authController = require("../controllers/auth.contoller");
+const authController = require("../controllers/auth.controller");
 const authMW = require("../middlewares/auth.mw");
 
 module.exports = (app) => {
@@ -6,5 +6,10 @@ module.exports = (app) => {
     "/ecomm/api/v1/auth/signup",
     [authMW.veryfySignUpBody],
     authController.signUp
+  );
+  app.post(
+    "/ecomm/api/v1/auth/signin",
+    [authMW.veryfySignInBody],
+    authController.signin
   );
 };
