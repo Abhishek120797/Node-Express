@@ -1,14 +1,14 @@
+require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
-const server_config = require("./config/server.config");
-const db_config = require("./config/db.config");
+
 const user_model = require("./models/user.model");
 const bcrypt = require("bcryptjs");
 
 app.use(express.json());
 
-mongoose.connect(db_config.DB_URL);
+mongoose.connect(process.env.DB_URL);
 
 const db = mongoose.connection;
 
@@ -49,6 +49,6 @@ async function init() {
 require("./routes/auth.route")(app);
 require("./routes/category.route")(app);
 
-app.listen(server_config.PORT, () => {
-  console.log("server started at port number : ", server_config.PORT);
+app.listen(process.env.PORT, () => {
+  console.log("server started at port number : ", process.env.PORT);
 });

@@ -1,6 +1,6 @@
 const user_model = require("../models/user.model");
 const jwt = require("jsonwebtoken");
-const auth_config = require("../config/auth.config");
+require("dotenv").config();
 
 const veryfySignUpBody = async (req, res, next) => {
   try {
@@ -64,7 +64,7 @@ const verifyToken = (req, res, next) => {
     });
   }
 
-  jwt.verify(token, auth_config.secret, async (error, decoded) => {
+  jwt.verify(token, process.env.SECRET, async (error, decoded) => {
     if (error) {
       return res.status(401).send({
         message: "Unauthorized!",

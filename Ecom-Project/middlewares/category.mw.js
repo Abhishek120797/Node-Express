@@ -29,6 +29,18 @@ const categoryCheck = async (req, res, next) => {
   next();
 };
 
+const categoryNameCheck = (req, res, next) => {
+  const { name } = req.query;
+
+  if (!name) {
+    return res.status(400).send({
+      message: "Category name is required",
+    });
+  }
+  next();
+};
+
 module.exports = {
   categoryCheck: categoryCheck,
+  categoryNameCheck: categoryNameCheck,
 };
