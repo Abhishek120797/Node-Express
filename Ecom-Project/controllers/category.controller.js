@@ -17,7 +17,7 @@ exports.createNewCategory = async (req, res) => {
 };
 
 exports.deleteCategory = async (req, res) => {
-  const { name } = req.query;
+  const name = req.params.name;
 
   try {
     const category_deleted = await category_model.findOneAndDelete({
@@ -41,7 +41,7 @@ exports.deleteCategory = async (req, res) => {
 };
 
 exports.updateCategory = async (req, res) => {
-  const { name } = req.query;
+  const name = req.params.name;
   const { name: newName, description } = req.body;
 
   try {
@@ -76,6 +76,18 @@ exports.updateCategory = async (req, res) => {
     console.log("error while updating the category ", error);
     res.status(500).send({
       message: "Error while updating the category",
+    });
+  }
+};
+
+exports.getCategory = async (req, res) => {
+  try {
+    const category_list = await category_model.find();
+    return res.status(200).json(category_list);
+  } catch (error) {
+    console.log("Error while getting data from database ", error);
+    res.status(500).send({
+      message: "Error while getting category",
     });
   }
 };

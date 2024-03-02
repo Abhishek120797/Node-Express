@@ -30,7 +30,7 @@ const categoryCheck = async (req, res, next) => {
 };
 
 const categoryNameCheck = (req, res, next) => {
-  const { name } = req.query;
+  const name = req.params.name;
 
   if (!name) {
     return res.status(400).send({
