@@ -19,6 +19,11 @@ module.exports = (app) => {
     [auth_mw.verifyToken],
     product_controller.getProduct
   );
+  app.get(
+    "/ecomm/api/v1/product/:category",
+    [auth_mw.verifyToken, product_mw.categoryCheck],
+    product_controller.getProductByCategory
+  );
   app.delete(
     "/ecomm/api/v1/product/:name/:category",
     [

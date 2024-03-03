@@ -132,3 +132,17 @@ exports.getProduct = async (req, res) => {
     });
   }
 };
+
+exports.getProductByCategory = async (req, res) => {
+  const categoryName = req.params.category;
+  const category = await category_model.findOne({ name: categoryName });
+  try {
+    const product_list = await product_model.find({ category: category._id });
+    return res.status(200).send(product_list);
+  } catch (error) {
+    console.log("Error while getting product by category", error);
+    res.status(500).send({
+      message: "Error while getting product by category",
+    });
+  }
+};
