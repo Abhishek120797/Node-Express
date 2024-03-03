@@ -25,13 +25,19 @@ const veryfySignUpBody = async (req, res, next) => {
       });
     }
 
-    const user = await user_model.findOne({ email: req.body.email });
-    if (user) {
+    const userEmailCheck = await user_model.findOne({ email: req.body.email });
+    if (userEmailCheck) {
       return res.status(400).send({
         message: "user already registerd with this email you provided",
       });
     }
 
+    const userIdCheck = await user_model.findOne({ userId: req.body.userId });
+    if (userIdCheck) {
+      return res.status(400).send({
+        message: "user already registerd with this UserId you provided",
+      });
+    }
     next();
   } catch (error) {
     console.log("Error while verifying req body ", error);
@@ -80,7 +86,7 @@ const verifyToken = (req, res, next) => {
     }
 
     req.user = user;
-
+    req.user.id = user._id;
     next();
   });
 };

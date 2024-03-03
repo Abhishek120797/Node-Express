@@ -16,16 +16,7 @@ exports.signUp = async (req, res) => {
 
   try {
     const user = await user_model.create(userObj);
-
-    const res_user = {
-      name: user.name,
-      userId: user.userId,
-      email: user.email,
-      userType: user.userType,
-      createdAt: user.createdAt,
-      updatedAt: user.updatedAt,
-    };
-    res.status(201).send(res_user);
+    res.status(201).send(user);
   } catch (error) {
     console.log("Error while registering user ", error);
     res.status(500).send({
@@ -35,7 +26,9 @@ exports.signUp = async (req, res) => {
 };
 
 exports.signin = async (req, res) => {
-  const user = await user_model.findOne({ userId: req.body.userId });
+  const req_userId = req.body.userId;
+  const req_password = req.body.password;
+  const user = await user_model.findOne({ userId: req_userId });
 
   if (!user) {
     return res.status(400).send({
@@ -43,7 +36,7 @@ exports.signin = async (req, res) => {
     });
   }
 
-  const isPasswordValid = bcrypt.compareSync(req.body.password, user.password);
+  const isPasswordValid = bcrypt.compareSync(req_password, user.password);
 
   if (!isPasswordValid) {
     return res.status(401).send({
