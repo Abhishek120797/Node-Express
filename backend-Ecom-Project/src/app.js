@@ -32,9 +32,9 @@ import categoryRoutes from "./routes/category.route.js";
 import productRoutes from "./routes/product.route.js";
 import cartRoutes from "./routes/cart.route.js";
 
-app.use("/ecomm/api/v1/auth", authRoutes);
-app.use("/ecomm/api/v1/categories", categoryRoutes);
-app.use("/ecomm/api/v1/product", productRoutes);
-app.use("/ecomm/api/v1/cart", cartRoutes);
+app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/categories", categoryRoutes);
+app.use("/api/v1/product", productRoutes);
+app.use("/api/v1/cart", cartRoutes);
 
 export { app };
