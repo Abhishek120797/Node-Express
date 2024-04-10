@@ -9,7 +9,8 @@ const updatePassword = asyncHandler(async (req, res) => {
 
   const user_object = await user_model.findByPk(req.user.user_id);
 
-  const isPasswordCorrect = await user_model.isPasswordCorrect(currentPassword);
+  const isPasswordCorrect =
+    await user_object.isPasswordCorrect(currentPassword);
 
   if (!isPasswordCorrect) {
     throw new ApiError(400, "Invaild old password");
@@ -17,15 +18,16 @@ const updatePassword = asyncHandler(async (req, res) => {
 
   user_object.password = newPassword;
 
-  user_object.save({ fields: ["password"] });
+  await user_object.save();
 
-  return res.status(200).json(200, {}, "password successfully changed");
+  return res
+    .status(200)
+    .json(new ApiResponse(200, {}, "password successfully changed"));
 });
 
 const updateUserProfile = asyncHandler(async (req, res) => {
   const { fName, lName, contact, email } = req.body;
-
-  const user_object = await user_model.findByPk(req.user?.user_Id);
+  const user_object = await user_model.findByPk(req.user?.user_id);
 
   if (user_object) {
     if (fName) user_object.first_name = fName;
@@ -34,11 +36,9 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     if (email) user_object.email = email;
   }
 
-  await user_object.save({
-    fields: ["first_name", "last_name", "contact_number", "email"],
-  });
+  await user_object.save();
 
-  const updated_user = await user_model.findByPk(user_object.user_Id, {
+  const updated_user = await user_model.findByPk(user_object.user_id, {
     attributes: { exclude: ["password", "refreshToken"] },
   });
 
@@ -60,13 +60,13 @@ const updateAvatar = asyncHandler(async (req, res) => {
     throw new ApiError(400, "uploaded Avatar image is required");
   }
 
-  const user_object = await user_model.findByPk(req.user.user_Id);
+  const user_object = await user_model.findByPk(req.user.user_id);
 
   user_object.avatar = avatarImage.url;
 
-  await user_object.save({ fields: ["avatar"] });
+  await user_object.save();
 
-  const updated_user = await user_model.findByPk(user_object.user_Id, {
+  const updated_user = await user_model.findByPk(user_object.user_id, {
     attributes: { exclude: ["password", "refreshToken"] },
   });
 

@@ -16,5 +16,5 @@ connectDB()
     });
   })
   .catch((error) => {
-    console.log("Database conection failed : ", error);
+    console.log("Database connection failed : ", error);
   });

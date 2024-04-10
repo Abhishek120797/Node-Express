@@ -11,14 +11,14 @@ const generateAccessAndRefreshToken = async (user_Id) => {
     const newRefreshToken = user_object.generateRefreshToken();
 
     user_object.refreshToken = newRefreshToken;
-
-    await user.save({ fields: ["refreshToken"] });
+    await user_object.save({ fields: ["refreshToken"] });
 
     return { accessToken, newRefreshToken };
   } catch (error) {
     throw new ApiError(
       500,
-      "Something went wrong while generating refresh and access token"
+      "Something went wrong while generating refresh and access token",
+      [error]
     );
   }
 };
@@ -37,13 +37,14 @@ const register = asyncHandler(async (req, res) => {
 
   const user = await user_model.create(user_object);
 
-  const created_user = await user_model.findByPk(user.user_Id, {
+  const created_user = await user_model.findByPk(user.user_id, {
     attributes: { exclude: ["password", "refreshToken"] },
   });
 
   if (!created_user) {
     throw new ApiError(500, "Something went wrong while registering user");
   }
+
   return res
     .status(201)
     .json(new ApiResponse(201, created_user, "User registered successfully"));
@@ -51,27 +52,26 @@ const register = asyncHandler(async (req, res) => {
 
 const logIn = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
-
   const user_object = await user_model.findOne({ where: { email: email } });
 
   if (!user_object) {
     throw new ApiError(404, "user does not exist");
   }
 
-  const isPasswordValid = user_object.isPasswordCorrect(password);
+  const isPasswordValid = await user_object.isPasswordCorrect(password);
 
   if (!isPasswordValid) {
     throw new ApiError(401, "wrong password");
   }
 
   const { accessToken, newRefreshToken } = await generateAccessAndRefreshToken(
-    user_object.user_Id
+    user_object.user_id
   );
 
-  const logedInUser = await user_model.findByPk(user_object.user_Id, {
+  const logedInUser = await user_model.findByPk(user_object.user_id, {
     attributes: { exclude: ["password", "refreshToken"] },
   });
-  9;
+
   const options = {
     httpOnly: true,
     secure: true,
@@ -83,22 +83,20 @@ const logIn = asyncHandler(async (req, res) => {
     .cookie("refreshToken", newRefreshToken, options)
     .json(
       new ApiResponse(
-        200,
+        201,
         { user: logedInUser, accessToken, newRefreshToken },
-        "Signed in succesfully"
+        "Loged In in succesfully"
       )
     );
 });
 
 const logOut = asyncHandler(async (req, res) => {
-  const { user_Id } = req.body.user;
-
-  const user_object = await findByPk(user_Id);
+  const { user_id } = req.user;
+  const user_object = await user_model.findByPk(user_id);
 
   if (user_object) {
-    await user_object.update({
-      refreshToken: undefined,
-    });
+    user_object.refreshToken = null;
+    await user_object.save();
   }
 
   const options = {
@@ -130,7 +128,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
           throw new ApiError(401, "Unauthorised!");
         }
 
-        const user_object = await user_model.findByPk(decoded.user_Id);
+        const user_object = await user_model.findByPk(decoded.user_id);
 
         if (!user_object) {
           throw new ApiError(401, "Invalid Refresh Token");
@@ -146,7 +144,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
         };
 
         const { accessToken, newRefreshToken } =
-          await generateAccessAndRefreshToken(user_object.user_Id);
+          await generateAccessAndRefreshToken(user_object.user_id);
 
         return res
           .status(200)

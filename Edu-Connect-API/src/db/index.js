@@ -1,4 +1,6 @@
 import { user_model } from "../models/user.model.js";
+import { course_model } from "../models/course.model.js";
+import { user_course_model } from "../models/userCourses.model.js";
 import sequelize from "./dbInstance.js";
 
 const connectDB = async () => {
@@ -35,9 +37,9 @@ async function init() {
     const admin = await user_model.create({
       first_name: "Abhishek",
       last_name: "Jaiswal",
-      email: "abhi.jais1211@gmail.com",
-      contact_number: "7758938495",
-      password: "admin@123",
+      email: process.env.ADMIN_EMAIL,
+      contact_number: process.env.ADMIN_CONTACT,
+      password: process.env.ADMIN_PASSWORD,
       user_type: "ADMIN",
     });
     console.log("Admin created ", admin);

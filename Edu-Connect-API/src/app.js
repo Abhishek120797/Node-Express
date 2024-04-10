@@ -2,6 +2,9 @@ import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 
+import authRoutes from "./routes/auth.route.js";
+import userUpdateRoutes from "./routes/userUpdate.route.js";
+
 const app = express();
 
 app.use(
@@ -28,11 +31,8 @@ app.use(express.static("public"));
 
 app.use(cookieParser());
 
-import authRouter from "./routes/auth.route.js";
-import userUpdateRouter from "./routes/userUpdate.route.js";
+app.use("/api/v1/auth", authRoutes);
 
-app.use("/api/vi/auth", authRouter);
-
-app.use("/api/vi/update", userUpdateRouter);
+app.use("/api/v1/user-update", userUpdateRoutes);
 
 export { app };

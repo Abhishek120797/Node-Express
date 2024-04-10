@@ -5,6 +5,7 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 
 const verifyRegisterBody = asyncHandler(async (req, _, next) => {
   const { fName, email, contact, user_type, password } = req.body;
+
   if (!fName) {
     throw new ApiError(400, "First name is required");
   }
@@ -36,13 +37,15 @@ const verifyRegisterBody = asyncHandler(async (req, _, next) => {
 });
 
 const verifyLogInBody = asyncHandler(async (req, _, next) => {
-  const { user_id, password } = req.body;
-  if (!user_id) {
-    throw new ApiError(400, "userId is required");
+  const { email, password } = req.body;
+
+  if (!email) {
+    throw new ApiError(400, "email is required");
   }
   if (!password) {
     throw new ApiError(400, "password is required");
   }
+
   next();
 });
 
@@ -55,29 +58,28 @@ const verifyToken = asyncHandler(async (req, _, next) => {
     throw new ApiError(403, "No token found : Unauthorised");
   }
 
-  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (error, decoded) => {
-    try {
-      if (error) {
-        throw new ApiError(401, "Unauthorized!");
-      }
-      const user_object = await user_model.findByPk(decoded?.user_id, {
-        attributes: { exclude: ["password", "refreshToken"] },
-      });
+  try {
+    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
 
-      if (!user_object) {
-        throw new ApiError(401, "Invalid access token");
-      }
+    const user_object = await user_model.findByPk(decoded?.user_id, {
+      attributes: { exclude: ["password", "refreshToken"] },
+    });
 
-      req.user = user_object;
-      next();
-    } catch (error) {
-      throw new ApiError(401, error?.message || "Invalid access token");
+    if (!user_object) {
+      throw new ApiError(401, "Invalid access token");
     }
-  });
+
+    req.user = user_object;
+
+    next();
+  } catch (error) {
+    throw new ApiError(401, error?.message || "Invalid access token");
+  }
 });
 
 const isAdmin = (req, _, next) => {
   const user = req.user;
+
   if (user && user.user_type == "ADMIN") {
     next();
   } else {
@@ -90,6 +92,7 @@ const isAdmin = (req, _, next) => {
 
 const isInstructor = (req, _, next) => {
   const user = req.user;
+
   if (user && user.user_type == "INSTRUCTOR") {
     next();
   } else {

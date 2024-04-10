@@ -50,6 +50,12 @@ const user_model = sequelize.define(
   }
 );
 
+user_model.beforeUpdate((user) => {
+  if (user.changed("password")) {
+    user.password = bcrypt.hashSync(user.password, 8);
+  }
+});
+
 user_model.beforeCreate((user) => {
   if (user.changed("password")) {
     user.password = bcrypt.hashSync(user.password, 8);

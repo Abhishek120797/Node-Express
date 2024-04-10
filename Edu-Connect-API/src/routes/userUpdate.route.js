@@ -1,6 +1,7 @@
 import { Router } from "express";
 
 import { verifyToken } from "../middlewares/auth.middleware.js";
+
 import {
   verifyUpdateUserProfileBody,
   verifyUpdatePasswordBody,
@@ -17,13 +18,14 @@ import { upload } from "../middlewares/multer.middleware.js";
 
 const router = Router();
 
+//secured routes
 router
   .route("/profile")
-  .post(verifyUpdateUserProfileBody, verifyToken, updateUserProfile);
+  .post(verifyToken, verifyUpdateUserProfileBody, updateUserProfile);
 
 router
   .route("/password")
-  .post(verifyUpdatePasswordBody, verifyToken, updatePassword);
+  .post(verifyToken, verifyUpdatePasswordBody, updatePassword);
 
 router
   .route("/avatar")

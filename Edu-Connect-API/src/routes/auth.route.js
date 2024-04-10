@@ -19,6 +19,8 @@ router.route("/register").post(verifyRegisterBody, register);
 
 router.route("/login").post(verifyLogInBody, logIn);
 
+//secure routes
+
 router.route("/logout").post(verifyToken, logOut);
 
 router.route("/refresh-access-Token").post(refreshAccessToken);
