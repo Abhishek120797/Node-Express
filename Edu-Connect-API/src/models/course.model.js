@@ -20,6 +20,25 @@ const course_model = sequelize.define(
       type: DataTypes.UUID,
       allowNull: false,
     },
+    price: {
+      type: DataTypes.DECIMAL(10, 2),
+      allowNull: true,
+    },
+    duration: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    status: {
+      type: DataTypes.ENUM("Draft", "Published"),
+      defaultValue: "Draft",
+    },
+    coverImage: {
+      type: DataTypes.STRING,
+    },
+    category_id: {
+      type: DataTypes.UUID,
+      allowNull: false,
+    },
   },
   {
     timestamps: true,
@@ -27,14 +46,5 @@ const course_model = sequelize.define(
     updatedAt: "updated_at",
   }
 );
-
-(async () => {
-  try {
-    await course_model.sync();
-    console.log("Course model created");
-  } catch (error) {
-    console.log("Error synchronizing Course model:", error);
-  }
-})();
 
 export { course_model };

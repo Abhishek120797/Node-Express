@@ -3,6 +3,7 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { ApiError } from "../utils/ApiError.js";
 import jwt from "jsonwebtoken";
+import registerMail from "../utils/registerMail.js";
 
 const generateAccessAndRefreshToken = async (user_Id) => {
   try {
@@ -44,6 +45,8 @@ const register = asyncHandler(async (req, res) => {
   if (!created_user) {
     throw new ApiError(500, "Something went wrong while registering user");
   }
+
+  // await registerMail(created_user.email);
 
   return res
     .status(201)

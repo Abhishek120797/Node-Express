@@ -82,13 +82,4 @@ user_model.prototype.generateRefreshToken = function () {
   });
 };
 
-(async () => {
-  try {
-    await user_model.sync();
-    console.log("User model created");
-  } catch (error) {
-    console.log("Error synchronizing User model:", error);
-  }
-})();
-
 export { user_model };

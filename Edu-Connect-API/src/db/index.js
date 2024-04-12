@@ -1,7 +1,11 @@
-import { user_model } from "../models/user.model.js";
-import { course_model } from "../models/course.model.js";
-import { user_course_model } from "../models/userCourses.model.js";
 import sequelize from "./dbInstance.js";
+import "../models/assignment.model.js";
+import "../models/course.model.js";
+import "../models/courseCategory.model.js";
+import { user_model } from "../models/user.model.js";
+import "../models/userCourses.model.js";
+import "../models/video.model.js";
+import "../models/association.js";
 
 const connectDB = async () => {
   try {
@@ -11,7 +15,7 @@ const connectDB = async () => {
       "Connection has been established successfully to Neon database"
     );
 
-    await sequelize.sync();
+    await sequelize.sync({ force: true });
     console.log("All models synchronized");
 
     await init();

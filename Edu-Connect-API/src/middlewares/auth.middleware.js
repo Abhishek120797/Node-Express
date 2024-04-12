@@ -90,15 +90,15 @@ const isAdmin = (req, _, next) => {
   }
 };
 
-const isInstructor = (req, _, next) => {
+const isInstructorOrAdmin = (req, _, next) => {
   const user = req.user;
 
-  if (user && user.user_type == "INSTRUCTOR") {
+  if (user && (user.user_type === "INSTRUCTOR" || user.user_type === "ADMIN")) {
     next();
   } else {
     throw new ApiError(
       403,
-      "Only INSTRUCTOR users are allowed to access this endpoint"
+      "Only INSTRUCTOR and ADMIN users are allowed to access this endpoint"
     );
   }
 };
@@ -108,5 +108,5 @@ export {
   verifyLogInBody,
   verifyToken,
   isAdmin,
-  isInstructor,
+  isInstructorOrAdmin,
 };

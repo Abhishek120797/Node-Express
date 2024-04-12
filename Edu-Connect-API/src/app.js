@@ -4,6 +4,11 @@ import cors from "cors";
 
 import authRoutes from "./routes/auth.route.js";
 import userUpdateRoutes from "./routes/userUpdate.route.js";
+import userRoutes from "./routes/user.route.js";
+import assignmentRoutes from "./routes/assignment.route.js";
+import videoRoutes from "./routes/video.route.js";
+import courseRoutes from "./routes/course.route.js";
+import courseCategoryRoutes from "./routes/courseCategory.route.js";
 
 const app = express();
 
@@ -33,6 +38,16 @@ app.use(cookieParser());
 
 app.use("/api/v1/auth", authRoutes);
 
-app.use("/api/v1/user-update", userUpdateRoutes);
+app.use("/api/v1/user/update", userUpdateRoutes);
+
+app.use("/api/v1/user", userRoutes);
+
+app.use("/api/v1/course/assignment", assignmentRoutes);
+
+app.use("/api/v1/course/video", videoRoutes);
+
+app.use("/api/v1/course", courseRoutes);
+
+app.use("/api/v1/courseCategory", courseCategoryRoutes);
 
 export { app };
