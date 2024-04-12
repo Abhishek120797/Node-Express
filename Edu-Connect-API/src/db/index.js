@@ -15,7 +15,7 @@ const connectDB = async () => {
       "Connection has been established successfully to Neon database"
     );
 
-    await sequelize.sync({ force: true });
+    await sequelize.sync();
     console.log("All models synchronized");
 
     await init();

@@ -2,16 +2,49 @@ import { Router } from "express";
 
 import { verifyToken, isAdmin } from "../middlewares/auth.middleware.js";
 
+import {
+  verifyCourseCategory,
+  verifyCourseCategoryTitle,
+  verifyUpdateCourseCategory,
+} from "../middlewares/courseCategory.middleware.js";
+
+import {
+  createCourseCategory,
+  getCourseCategory,
+  getCourseCategorybyTitle,
+  updateCourseCategory,
+  deleteCourseCategory,
+} from "../controllers/courseCategory.controller.js";
+
 const router = Router();
 
-router.route("/").get(verifyToken);
+router.route("/").get(verifyToken, getCourseCategory);
 
-router.route("/:courseCategoryId").get(verifyToken);
+router
+  .route("/:categoryTitle")
+  .get(verifyToken, verifyCourseCategoryTitle, getCourseCategorybyTitle);
 
-router.route("/").post(verifyToken, isAdmin);
+router
+  .route("/")
+  .post(verifyToken, isAdmin, verifyCourseCategory, createCourseCategory);
 
-router.route("/:courseCategoryId").patch(verifyToken, isAdmin);
+router
+  .route("/:categoryTitle")
+  .patch(
+    verifyToken,
+    isAdmin,
+    verifyCourseCategoryTitle,
+    verifyUpdateCourseCategory,
+    updateCourseCategory
+  );
 
-router.route("/:courseCategoryId").delete(verifyToken, isAdmin);
+router
+  .route("/:categoryTitle")
+  .delete(
+    verifyToken,
+    isAdmin,
+    verifyCourseCategoryTitle,
+    deleteCourseCategory
+  );
 
 export default router;

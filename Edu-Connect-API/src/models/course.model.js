@@ -12,6 +12,7 @@ const course_model = sequelize.define(
     title: {
       type: DataTypes.STRING(255),
       allowNull: false,
+      unique: true,
     },
     description: {
       type: DataTypes.STRING(1000),
@@ -22,7 +23,7 @@ const course_model = sequelize.define(
     },
     price: {
       type: DataTypes.DECIMAL(10, 2),
-      allowNull: true,
+      allowNull: false,
     },
     duration: {
       type: DataTypes.INTEGER,

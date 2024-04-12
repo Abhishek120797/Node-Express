@@ -158,6 +158,8 @@ const getProduct = asyncHandler(async (req, res) => {
 
 const getProductByCategory = asyncHandler(async (req, res) => {
   const { category } = req.params;
+  console.log(category);
+
   const categoryObject = await category_model.findOne({ name: category });
 
   const product_list = await product_model.find({
