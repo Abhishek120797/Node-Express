@@ -15,13 +15,21 @@ import {
 
 import { upload } from "../middlewares/multer.middleware.js";
 
-import { verifyCourseCreation } from "../middlewares/course.middleware.js";
+import {
+  verifyCourseCreation,
+  verifyCourseUpdate,
+  verifyCourseTitle,
+} from "../middlewares/course.middleware.js";
+
+import { verifyCourseCategoryTitle } from "../middlewares/courseCategory.middleware.js";
 
 const router = Router();
 
 router.route("/").get(verifyToken, getCourse);
 
-router.route("/courseCategoryId").get(verifyToken, getCourseByCategory);
+router
+  .route("/:categoryTitle")
+  .get(verifyToken, verifyCourseCategoryTitle, getCourseByCategory);
 
 //secured routes only for admin and instructor
 router
@@ -35,11 +43,18 @@ router
   );
 
 router
-  .route("/:courseId")
-  .patch(verifyToken, isInstructorOrAdmin, updateCourse);
+  .route("/:courseTitle")
+  .patch(
+    verifyToken,
+    isInstructorOrAdmin,
+    upload.single("coverImage"),
+    verifyCourseTitle,
+    verifyCourseUpdate,
+    updateCourse
+  );
 
 router
-  .route("/:courseId")
-  .delete(verifyToken, isInstructorOrAdmin, deleteCourse);
+  .route("/:courseTitle")
+  .delete(verifyToken, isInstructorOrAdmin, verifyCourseTitle, deleteCourse);
 
 export default router;

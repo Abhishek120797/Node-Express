@@ -21,8 +21,6 @@ const verifyCourseCategory = asyncHandler(async (req, res, next) => {
 const verifyCourseCategoryTitle = asyncHandler((req, res, next) => {
   const { categoryTitle } = req.params;
 
-  console.log(categoryTitle);
-
   if (!categoryTitle || categoryTitle === ":categoryTitle") {
     throw new ApiError(404, "course category title is required");
   }
