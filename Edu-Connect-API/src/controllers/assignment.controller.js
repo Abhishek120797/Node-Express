@@ -21,7 +21,7 @@ const addAssignment = asyncHandler(async (req, res) => {
   if (!assignmentPath) {
     throw new ApiError(404, "Assignment path not found");
   }
-  const assignment = await uploadOnCloudinary(assignmentPath);
+  const assignment = await uploadOnCloudinary(assignmentPath, "raw");
 
   const assignment_object = {
     title: title,
@@ -98,7 +98,7 @@ const updateAssignment = asyncHandler(async (req, res) => {
   }
   let assignment;
   if (assignmentPath) {
-    assignment = await uploadOnCloudinary(assignmentPath);
+    assignment = await uploadOnCloudinary(assignmentPath, "raw");
   }
 
   if (title) assignment_object.title = title;

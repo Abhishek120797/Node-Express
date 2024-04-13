@@ -54,7 +54,7 @@ const updateAvatar = asyncHandler(async (req, res) => {
     throw new ApiError(400, "Avatar image path is required");
   }
 
-  const avatarImage = await uploadOnCloudinary(localImagePath);
+  const avatarImage = await uploadOnCloudinary(localImagePath, "image");
 
   if (!avatarImage) {
     throw new ApiError(400, "uploaded Avatar image is required");
