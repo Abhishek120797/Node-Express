@@ -4,6 +4,8 @@ import {
   verifyRegisterBody,
   verifyLogInBody,
   verifyToken,
+  verificationRegisterBody,
+  verificationCode,
 } from "../middlewares/auth.middleware.js";
 
 import {
@@ -11,11 +13,19 @@ import {
   logIn,
   logOut,
   refreshAccessToken,
+  verificationRegister,
+  checkVerificationCode,
 } from "../controllers/auth.controller.js";
 
 const router = Router();
 
 router.route("/register").post(verifyRegisterBody, register);
+router
+  .route("/register/verifyRegister")
+  .post(verificationRegisterBody, verificationRegister);
+router
+  .route("/register/verifyRegister/verifyCode")
+  .post(verificationCode, checkVerificationCode);
 
 router.route("/login").post(verifyLogInBody, logIn);
 

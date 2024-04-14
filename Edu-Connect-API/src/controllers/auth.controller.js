@@ -3,7 +3,10 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { ApiError } from "../utils/ApiError.js";
 import jwt from "jsonwebtoken";
-import registerMail from "../utils/registerMail.js";
+import {
+  sendRegisterMail,
+  sendVerificationMail,
+} from "../utils/registerMail.js";
 
 const generateAccessAndRefreshToken = async (user_Id) => {
   try {
@@ -27,30 +30,90 @@ const generateAccessAndRefreshToken = async (user_Id) => {
 const register = asyncHandler(async (req, res) => {
   const { fName, lName, email, contact, user_type, password } = req.body;
 
-  const user_object = {
-    first_name: fName,
-    last_name: lName,
-    email: email,
-    contact_number: contact,
-    user_type: user_type,
-    password: password,
-  };
+  const userByEmail = await user_model.findOne({ where: { email: email } });
 
-  const user = await user_model.create(user_object);
+  if (!userByEmail) {
+    const user_object = {
+      first_name: fName,
+      last_name: lName,
+      email: email,
+      contact_number: contact,
+      user_type: user_type,
+      password: password,
+      verified: false,
+    };
+    const user = await user_model.create(user_object);
+    if (!user) {
+      throw new ApiError(500, "Something went wrong while registering user");
+    }
+    return res
+      .status(201)
+      .json(new ApiResponse(201, user, "registration details saved"));
+  } else {
+    userByEmail.password = password;
+    await userByEmail.save();
+    return res
+      .status(201)
+      .json(new ApiResponse(201, userByEmail, "registration details saved"));
+  }
+});
 
-  const created_user = await user_model.findByPk(user.user_id, {
-    attributes: { exclude: ["password", "refreshToken"] },
-  });
+const verificationRegister = asyncHandler(async (req, res) => {
+  const { email } = req.body;
+  const user = await user_model.findOne({ where: { email: email } });
 
-  if (!created_user) {
-    throw new ApiError(500, "Something went wrong while registering user");
+  if (user) {
+    if (!user.verified) {
+      const code = Math.floor(100000 + Math.random() * 900000).toString();
+
+      user.verification_Code = code;
+      await user.save();
+
+      const { success, message } = await sendVerificationMail(email, code);
+
+      if (!success) {
+        throw new ApiError(500, message);
+      } else {
+        return res.status(201).json(new ApiResponse(201, {}, message));
+      }
+    } else {
+      throw new ApiError(409, "user already registerd and verified");
+    }
+  } else {
+    throw new ApiError(404, "user not registered");
+  }
+});
+
+const checkVerificationCode = asyncHandler(async (req, res) => {
+  const { email, code } = req.body;
+
+  const user = await user_model.findOne({ where: { email: email } });
+
+  if (user) {
+    if (user.verification_Code == code) {
+      user.verified = true;
+      await user.save();
+      const { success, message } = await sendRegisterMail(email);
+
+      if (success) {
+        return res
+          .status(201)
+          .json(
+            new ApiResponse(
+              201,
+              {},
+              "user registration verification done successfully"
+            )
+          );
+      } else {
+        return res.status(500).json(new ApiError(500, message));
+      }
+    } else {
+      throw new ApiError(400, "Incorrect verification code");
+    }
   }
 
-  // await registerMail(created_user.email);
-
-  return res
-    .status(201)
-    .json(new ApiResponse(201, created_user, "User registered successfully"));
+  throw new ApiError(404, "User not register");
 });
 
 const logIn = asyncHandler(async (req, res) => {
@@ -167,4 +230,11 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
   );
 });
 
-export { register, logIn, logOut, refreshAccessToken };
+export {
+  register,
+  logIn,
+  logOut,
+  refreshAccessToken,
+  verificationRegister,
+  checkVerificationCode,
+};

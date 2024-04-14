@@ -1,25 +1,42 @@
 import { Resend } from "resend";
-import { ApiError } from "./ApiError.js";
 
-const registerMail = async (emailId) => {
+const sendRegisterMail = async (emailId) => {
   try {
     const resend = new Resend(process.env.RESEND_API_KEY);
 
-    const { data, error } = await resend.emails.send({
+    await resend.emails.send({
       from: "onboarding@resend.dev",
       to: [emailId],
       subject: "Welcome to Edu-Connect",
       html: `<strong>Registration succesfully to Edu-Conect</strong>`,
     });
 
-    if (error) {
-      throw new ApiError(400, "mail not send ", [error]);
-    }
-
-    return data;
+    return {
+      success: true,
+      message: "User registeration email send successfully",
+    };
   } catch (error) {
-    throw new ApiError(500, "Error while sending mail", [error]);
+    console.log("Error while sending registeration mail");
+    return { success: false, message: "User registeration email throws error" };
   }
 };
 
-export default registerMail;
+const sendVerificationMail = async (emailId, verifyCode) => {
+  try {
+    const resend = new Resend(process.env.RESEND_API_KEY);
+
+    await resend.emails.send({
+      from: "onboarding@resend.dev",
+      to: [emailId],
+      subject: "Verify your Email",
+      html: `<strong>Verification code ${verifyCode}</strong>`,
+    });
+
+    return { success: true, message: "Verification email send successfully" };
+  } catch (error) {
+    console.log("Error while sending verification mail");
+    return { success: false, message: "User Verification email throws error" };
+  }
+};
+
+export { sendRegisterMail, sendVerificationMail };

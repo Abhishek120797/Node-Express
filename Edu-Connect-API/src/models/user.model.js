@@ -39,6 +39,14 @@ const user_model = sequelize.define(
       allowNull: false,
       defaultValue: "STUDENT",
     },
+    verified: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
+    verification_Code: {
+      type: DataTypes.STRING,
+      defaultValue: null,
+    },
     refreshToken: {
       type: DataTypes.STRING,
     },

@@ -15,7 +15,7 @@ const connectDB = async () => {
       "Connection has been established successfully to Neon database"
     );
 
-    await sequelize.sync();
+    await sequelize.sync({ force: true });
     console.log("All models synchronized");
 
     await init();
@@ -45,6 +45,7 @@ async function init() {
       contact_number: process.env.ADMIN_CONTACT,
       password: process.env.ADMIN_PASSWORD,
       user_type: "ADMIN",
+      verified: true,
     });
     console.log("Admin created ", admin);
   } catch (error) {
