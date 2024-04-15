@@ -3,6 +3,7 @@ import { Router } from "express";
 import {
   verifyToken,
   isInstructorOrAdmin,
+  isAdmin,
 } from "../middlewares/auth.middleware.js";
 import { verifyCourseTitle } from "../middlewares/course.middleware.js";
 import { upload } from "../middlewares/multer.middleware.js";
@@ -22,7 +23,7 @@ import {
 
 const router = Router();
 
-router.route("/").get(verifyToken, getAssignment);
+router.route("/").get(verifyToken, isAdmin, getAssignment);
 router
   .route("/:courseTitle")
   .get(

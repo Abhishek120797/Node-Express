@@ -22,7 +22,12 @@ router.route("/").get(verifyToken, getCourseCategory);
 
 router
   .route("/:categoryTitle")
-  .get(verifyToken, verifyCourseCategoryTitle, getCourseCategorybyTitle);
+  .get(
+    verifyToken,
+    isAdmin,
+    verifyCourseCategoryTitle,
+    getCourseCategorybyTitle
+  );
 
 router
   .route("/")
