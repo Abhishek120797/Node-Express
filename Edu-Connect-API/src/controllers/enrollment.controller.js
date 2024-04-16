@@ -3,6 +3,7 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { ApiError } from "../utils/ApiError.js";
 import { user_course_model } from "../models/userCourses.model.js";
 import { course_model } from "../models/course.model.js";
+import { sendCourseEnrollmentMail } from "../utils/registerMail.js";
 
 const enrollInCourse = asyncHandler(async (req, res) => {
   const { courseTitle } = req.body;
@@ -27,6 +28,12 @@ const enrollInCourse = asyncHandler(async (req, res) => {
     user_id: user.user_id,
     course_id: course.course_id,
   });
+
+  const { success, message } = await sendCourseEnrollmentMail(user.email);
+
+  if (!success) {
+    throw new ApiError(500, message);
+  }
 
   return res.status(200).json(new ApiResponse(200, "Enrollment successful"));
 });

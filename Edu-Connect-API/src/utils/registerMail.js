@@ -39,4 +39,25 @@ const sendVerificationMail = async (emailId, verifyCode) => {
   }
 };
 
-export { sendRegisterMail, sendVerificationMail };
+const sendCourseEnrollmentMail = async (emailId) => {
+  try {
+    const resend = new Resend(process.env.RESEND_API_KEY);
+
+    await resend.emails.send({
+      from: "onboarding@resend.dev",
+      to: [emailId],
+      subject: "Enrolled on Edu-Connect course",
+      html: `<strong>Successfully Enrolled on course</strong>`,
+    });
+
+    return {
+      success: true,
+      message: "course Enrollment email send successfully",
+    };
+  } catch (error) {
+    console.log("Error while sending enrollment mail");
+    return { success: false, message: "course enrollment email throws error" };
+  }
+};
+
+export { sendRegisterMail, sendVerificationMail, sendCourseEnrollmentMail };
