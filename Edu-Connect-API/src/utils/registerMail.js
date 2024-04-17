@@ -5,7 +5,7 @@ const sendRegisterMail = async (emailId) => {
     const resend = new Resend(process.env.RESEND_API_KEY);
 
     await resend.emails.send({
-      from: "onboarding@resend.dev",
+      from: "ec2-13-200-84-91.ap-south-1.compute.amazonaws.com",
       to: [emailId],
       subject: "Welcome to Edu-Connect",
       html: `<strong>Registration succesfully to Edu-Conect</strong>`,
@@ -26,7 +26,7 @@ const sendVerificationMail = async (emailId, verifyCode) => {
     const resend = new Resend(process.env.RESEND_API_KEY);
 
     await resend.emails.send({
-      from: "onboarding@resend.dev",
+      from: "ec2-13-200-84-91.ap-south-1.compute.amazonaws.com",
       to: [emailId],
       subject: "Verify your Email",
       html: `<strong>Verification code ${verifyCode}</strong>`,
@@ -44,7 +44,7 @@ const sendCourseEnrollmentMail = async (emailId) => {
     const resend = new Resend(process.env.RESEND_API_KEY);
 
     await resend.emails.send({
-      from: "onboarding@resend.dev",
+      from: "ec2-13-200-84-91.ap-south-1.compute.amazonaws.com",
       to: [emailId],
       subject: "Enrolled on Edu-Connect course",
       html: `<strong>Successfully Enrolled on course</strong>`,
