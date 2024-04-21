@@ -24,7 +24,11 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - run: cd Edu-Connect-API && npm ci
+    - name: Install dependencies
+    - run: | 
+        cd Edu-Connect-API
+        npm ci
+    - name: Set up environment variables
     - run: |
           cd Edu-Connect-API
           touch .env
