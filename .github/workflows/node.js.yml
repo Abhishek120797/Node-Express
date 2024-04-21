@@ -8,6 +8,9 @@ jobs:
   build:
 
     runs-on: self-hosted
+    defaults:
+       run:
+         working-directory: ./Edu-Connect-API/
 
     strategy:
       matrix:
@@ -21,13 +24,14 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
+        cache-dependency-path: ./Edu-Connect-API/package-lock.json
         
     - name: Install dependencies
       run: npm ci
-      working-directory: './Edu-Connect-API'
+      working-directory: ./Edu-Connect-API
       
     - name: Set up environment variables
       run: |
         touch .env
         echo "${{ secrets.PROD_ENV_FILE }}" > .env
-      working-directory: './Edu-Connect-API'
+      working-directory: ./Edu-Connect-API
