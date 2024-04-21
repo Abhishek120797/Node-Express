@@ -20,6 +20,8 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
+    - name: Clear npm cache
+      run: npm cache clean --force
     - name: Install dependencies
       run: |
         cd /home/ubuntu/actions-runner/_work/Node-Express/Node-Express/Edu-Connect-API
