@@ -24,10 +24,10 @@ jobs:
         
     - name: Install dependencies
       run: npm ci
-      working-directory: Edu-Connect-API
+      working-directory: './Edu-Connect-API'
       
     - name: Set up environment variables
       run: |
         touch .env
         echo "${{ secrets.PROD_ENV_FILE }}" > .env
-      working-directory: Edu-Connect-API
+      working-directory: './Edu-Connect-API'
