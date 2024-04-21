@@ -24,8 +24,8 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - run: cd Edu-Connect-API && npm ci
+    - run: cd Edu-Connect-API && npm ci --prefix Edu-Connect-API
     - run: |
         cd Edu-Connect-API
         touch .env
-        echo "${{secrets.PROD_ENV_FILE}}" > .env
+        echo "${{ secrets.PROD_ENV_FILE }}" > .env
