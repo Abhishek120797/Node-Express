@@ -22,9 +22,10 @@ jobs:
         cache: 'npm'
     - name: Install dependencies
       run: |
-        cd Edu-Connect-Api
+        cd /home/ubuntu/actions-runner/_work/Node-Express/Node-Express/Edu-Connect-API
         npm ci
     - name: Set up environment variables
       run: |
+        cd /home/ubuntu/actions-runner/_work/Node-Express/Node-Express/Edu-Connect-API
         touch .env
         echo "${{ secrets.PROD_ENV_FILE }}" > .env
