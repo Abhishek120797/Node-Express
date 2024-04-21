@@ -21,8 +21,8 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
-        cache-dependency-path: ./Edu-Connect-API/package-lock.json
         cache: 'npm'
+        cache-dependency-path: '**/package-lock.json'
         
     - run: npm ci
         
