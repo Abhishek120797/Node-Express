@@ -20,14 +20,10 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - name: Clear npm cache
-      run: npm cache clean --force
     - name: Install dependencies
-      run: |
-        cd /home/ubuntu/actions-runner/_work/Node-Express/Node-Express/Edu-Connect-API
-        npm ci
+      run: npm ci
+      working-directory: /home/ubuntu/actions-runner/_work/Node-Express/Node-Express/Edu-Connect-API
     - name: Set up environment variables
       run: |
-        cd /home/ubuntu/actions-runner/_work/Node-Express/Node-Express/Edu-Connect-API
         touch .env
         echo "${{ secrets.PROD_ENV_FILE }}" > .env
