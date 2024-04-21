@@ -12,8 +12,6 @@ jobs:
 
     runs-on: self-hosted
 
-     - run: cd Edu-Connect-API
-
     strategy:
       matrix:
         node-version: [18.x]
