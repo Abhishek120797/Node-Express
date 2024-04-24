@@ -23,7 +23,9 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
         cache-dependency-path: './Edu-Connect-API/package-lock.json'
-        
+
+    - name: Change directory
+      run: cd ./Edu-Connect-API
     - run: npm ci
         
     - run: |
