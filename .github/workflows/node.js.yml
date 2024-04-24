@@ -22,7 +22,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-        cache-dependency-path: './Edu-Connect-API/'
+        cache-dependency-path: './Edu-Connect-API/package-lock.json'
         
     - run: npm ci
         
