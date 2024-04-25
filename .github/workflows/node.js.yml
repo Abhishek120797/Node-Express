@@ -33,3 +33,6 @@ jobs:
           touch .env
           echo "${{ secrets.PROD_ENV_FILE }}" > .env
         working-directory: ./Edu-Connect-API
+
+      - run: pm2 restart src/index.js --node-args="-r dotenv/config" --update-env
+        working-directory: ./Edu-Connect-API
