@@ -35,3 +35,4 @@ jobs:
         working-directory: ./Edu-Connect-API
 
       - run: pm2 restart ./src/index.js
+        working-directory: ./Edu-Connect-API
